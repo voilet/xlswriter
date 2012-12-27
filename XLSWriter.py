@@ -62,7 +62,6 @@ class XLSWriter(object):
         self.wbk.save(self.file)
         
 if __name__ == '__main__':
-    import csv
     # test
     xlswriter = XLSWriter(u'陕西.xls')
     xlswriter.writerow(['姓名', '年龄', '电话', 'QQ'], sheet_name=u'基本信息')
