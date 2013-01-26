@@ -51,7 +51,7 @@ class XLSWriter(object):
             if self.sheets[sheet_name]['header']:
                 self.writerow(self.sheets[sheet_name]['header'], sheet_name)
         for ci, col in enumerate(row):
-            self.sheets[sheet_name]['sheet'].write(self.sheets[sheet_name]['rows'], ci, self.cell(col))
+            self.sheets[sheet_name]['sheet'].write(self.sheets[sheet_name]['rows'], ci, self.cell(col) if type(col) != xlwt.ExcelFormula.Formula else col)
         self.sheets[sheet_name]['rows'] += 1
             
     def writerows(self, rows, sheet_name='sheet'):
