@@ -20,10 +20,10 @@ class XLSWriter(object):
         if sheet_name in self.sheets:
             sheet_index = self.sheets[sheet_name]['index'] + 1
         else:
-            sheet_index = 1
+            sheet_index = 0
             self.sheets[sheet_name] = {'header': []}
         self.sheets[sheet_name]['index'] = sheet_index
-        self.sheets[sheet_name]['sheet'] = self.wbk.add_sheet('%s%d' % (sheet_name, sheet_index), cell_overwrite_ok=True)
+        self.sheets[sheet_name]['sheet'] = self.wbk.add_sheet('%s%s' % (sheet_name, sheet_index if sheet_index else ''), cell_overwrite_ok=True)
         self.sheets[sheet_name]['rows'] = 0
 
     def cell(self, s):
@@ -51,7 +51,7 @@ class XLSWriter(object):
             if self.sheets[sheet_name]['header']:
                 self.writerow(self.sheets[sheet_name]['header'], sheet_name)
         for ci, col in enumerate(row):
-            self.sheets[sheet_name]['sheet'].write(self.sheets[sheet_name]['rows'], ci, self.cell(col))
+            self.sheets[sheet_name]['sheet'].write(self.sheets[sheet_name]['rows'], ci, self.cell(col) if type(col) != xlwt.ExcelFormula.Formula else col)
         self.sheets[sheet_name]['rows'] += 1
             
     def writerows(self, rows, sheet_name='sheet'):
@@ -62,7 +62,6 @@ class XLSWriter(object):
         self.wbk.save(self.file)
         
 if __name__ == '__main__':
-    import csv
     # test
     xlswriter = XLSWriter(u'陕西.xls')
     xlswriter.writerow(['姓名', '年龄', '电话', 'QQ'], sheet_name=u'基本信息')
